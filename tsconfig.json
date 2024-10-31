@@ -18,41 +18,17 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/share": [
+      "@lib/share": [
         "libs/share/src"
       ],
-      "@app/share/*": [
+      "@lib/share/*": [
         "libs/share/src/*"
       ],
-      "@lib/audios": [
-        "libs/audios/src"
+      "@lib/users": [
+        "libs/users/src"
       ],
-      "@lib/audios/*": [
-        "libs/audios/src/*"
-      ],
-      "@lib/assignments": [
-        "libs/assignments/src"
-      ],
-      "@lib/assignments/*": [
-        "libs/assignments/src/*"
-      ],
-      "@lib/classes": [
-        "libs/classes/src"
-      ],
-      "@lib/classes/*": [
-        "libs/classes/src/*"
-      ],
-      "@lib/submissions": [
-        "libs/submissions/src"
-      ],
-      "@lib/submissions/*": [
-        "libs/submissions/src/*"
-      ],
-      "@lib/prompts": [
-        "libs/prompts/src"
-      ],
-      "@lib/prompts/*": [
-        "libs/prompts/src/*"
+      "@lib/users/*": [
+        "libs/users/src/*"
       ]
     }
   }
