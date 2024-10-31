@@ -1,5 +1,5 @@
 import {InfinityPaginationResultType} from '../serializers/infinity-pagination-result.serializer';
-import {PaginationOptions} from "@app/share/ts/pagination";
+import {PaginationOptions} from "@lib/share/ts/pagination";
 
 export const getPaginationProp = (page: number, limit: number) => {
   const offset = (page - 1) * limit;

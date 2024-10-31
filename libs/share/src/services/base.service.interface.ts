@@ -1,6 +1,6 @@
 import { HydratedDocument, UpdateWriteOpResult } from 'mongoose';
 import { PaginatedResultType } from '../serializers/paginated-response.serializer';
-import { QueryOptions } from '@app/share/ts/query-options';
+import { QueryOptions } from '@lib/share/ts/query-options';
 
 export interface Write<T> {
   create(item: Partial<T> | T | any): Promise<T>;

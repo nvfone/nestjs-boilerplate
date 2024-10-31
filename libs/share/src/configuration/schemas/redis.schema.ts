@@ -1,44 +1,47 @@
-import * as Joi from 'joi';
-import {HOST_SCHEMA, PORT_SCHEMA} from "@app/share/configuration/schemas/common.schema";
+import * as Joi from "joi";
+import {
+  HOST_SCHEMA,
+  PORT_SCHEMA,
+} from "@lib/share/configuration/schemas/common.schema";
+import { RedisConfigType } from "@lib/share/configuration/redis.config";
 
 export function redisConfigSchema(
   required = false,
-  prefix = 'REDIS_CACHE',
-  config_keys = null,
+  configPrefix = "REDIS",
+  configKeys = null
 ) {
-  let keys = {
-    host: 'HOST',
-    port: 'PORT',
-    db: 'DB',
-    auth: 'AUTH',
-    password: 'PASSWORD',
-    ttl: 'TTL',
-    prefix: 'PREFIX',
+  let keys: { [x in keyof RedisConfigType]: string } = {
+    host: "HOST",
+    port: "PORT",
+    db: "DB",
+    prefix: "PREFIX",
+    auth: "AUTH",
+    password: "PASSWORD",
   };
 
-  if (prefix != '') {
+  if (configPrefix != "") {
     for (const key in keys) {
-      keys[key] = `${prefix}_${keys[key]}`;
+      keys[key] = `${configPrefix}_${keys[key]}`;
     }
   }
 
-  if (config_keys != null) {
-    keys = config_keys;
+  if (configKeys != null) {
+    keys = configKeys;
   }
 
   const schema = {};
-  schema[`${keys.host}`] = HOST_SCHEMA.default('localhost');
+  schema[`${keys.host}`] = HOST_SCHEMA.default("localhost");
   schema[`${keys.port}`] = PORT_SCHEMA.default(6379);
   schema[`${keys.db}`] = Joi.number().default(1);
+  schema[`${keys.prefix}`] = Joi.string().default("");
   schema[`${keys.auth}`] = Joi.boolean().default(false);
-  schema[`${keys.password}`] = Joi.string().allow(null, '').default('example');
-  schema[`${keys.ttl}`] = Joi.number().default(0);
-  schema[`${keys.prefix}`] = Joi.string().default('');
+  schema[`${keys.password}`] = Joi.string().allow(null, "").default("example");
 
   if (required) {
     for (const key in schema) {
       schema[key] = schema[key].required();
     }
   }
+
   return schema;
 }

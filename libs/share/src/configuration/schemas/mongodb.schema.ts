@@ -1,11 +1,33 @@
-import * as Joi from 'joi';
-import {redisConfigSchema} from "@app/share/configuration/schemas/redis.schema";
+import * as Joi from "joi";
+import { HOST_SCHEMA } from "@lib/share/configuration/schemas/common.schema";
+import { redisConfigSchema } from "@lib/share/configuration/schemas/redis.schema";
+import { MongoDBConfigType } from "@lib/share/configuration/mongodb.config";
 
-export function mongodbConfigSchema(required = false, prefix = 'MONGODB') {
+export function mongodbConfigSchema(
+  required = false,
+  configPrefix = "MONGODB",
+  configKeys = null
+) {
+  let keys: { [x in keyof MongoDBConfigType]: string } = {
+    uri: "URI",
+    cacheEnable: "CACHE_ENABLE",
+  };
+
+  if (configPrefix != "") {
+    for (const key in keys) {
+      keys[key] = `${configPrefix}_${keys[key]}`;
+    }
+  }
+
+  if (configKeys != null) {
+    keys = configKeys;
+  }
+
   const schema = {};
-  schema[`${prefix}_URI`] = Joi.string().default(
-    'mongodb://admin:example@localhost:27017/p90db',
+  schema[`${configPrefix}_URI`] = HOST_SCHEMA.default(
+    "mongodb://admin:example@localhost:27017/p90db"
   );
+  schema[`${configPrefix}_CACHE_ENABLE`] = Joi.boolean().default(false);
 
   if (required) {
     for (const key in schema) {
@@ -15,7 +37,7 @@ export function mongodbConfigSchema(required = false, prefix = 'MONGODB') {
 
   return {
     ...schema,
-    ...(process.env[`${prefix}_CACHE_ENABLE`] == "true" &&
-      redisConfigSchema(false, `${prefix}_CACHE`)),
+    ...(process.env[`${configPrefix}_CACHE_ENABLE`] == "true" &&
+      redisConfigSchema(required, `${configPrefix}_CACHE`)),
   };
 }

@@ -1,46 +1,45 @@
 export type RedisConfigType = {
   host: string;
   port: number;
-  auth: boolean;
   db: number;
-  password: string | null;
-  ttl: string | number;
   prefix: string;
+  auth: boolean;
+  password: string | null;
 };
 
 export const buildRedisConfig = (
-  keymap = 'redis',
-  config_prefix = 'REDIS_CACHE',
-  config_keys = null,
+  configKeymap = "redis",
+  configPrefix = "REDIS",
+  configKeys = null
 ) => {
-  let keys = {
-    host: 'HOST',
-    port: 'PORT',
-    db: 'DB',
-    password: 'PASSWORD',
-    auth: 'AUTH',
-    prefix: 'PREFIX',
+  let keys: { [x in keyof RedisConfigType]: string } = {
+    host: "HOST",
+    port: "PORT",
+    db: "DB",
+    prefix: "PREFIX",
+    auth: "AUTH",
+    password: "PASSWORD",
   };
 
-  if (config_prefix != '') {
+  if (configPrefix != "") {
     for (const key in keys) {
-      keys[key] = `${config_prefix}_${keys[key]}`;
+      keys[key] = `${configPrefix}_${keys[key]}`;
     }
   }
 
-  if (config_keys != null) {
-    keys = config_keys;
+  if (configKeys != null) {
+    keys = configKeys;
   }
 
-  const schema = {};
-  schema[keymap] = {
+  const config = {};
+  config[configKeymap] = {
     host: process.env[keys.host],
     port: parseInt(process.env[`${keys.port}`]),
     db: parseInt(process.env[`${keys.db}`]),
-    auth: process.env[`${keys.auth}`] == 'true',
-    password: process.env[keys.password],
     prefix: process.env[`${keys.prefix}`],
+    auth: process.env[`${keys.auth}`] == "true",
+    password: process.env[keys.password],
   };
 
-  return schema as { redis: RedisConfigType };
+  return config;
 };

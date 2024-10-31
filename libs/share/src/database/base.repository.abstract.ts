@@ -10,7 +10,7 @@ import {
   getPaginationProp,
   getTotalPaginatedPages,
 } from '../utils/pagination.util';
-import { Nullable } from '@app/share/ts/nullable';
+import { Nullable } from '@lib/share/ts/nullable';
 
 export abstract class BaseRepositoryAbstract<T extends BaseSchema> {
   protected constructor(private readonly model: Model<T>) {

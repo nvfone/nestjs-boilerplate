@@ -91,7 +91,7 @@
       "<rootDir>/apps/"
     ],
     "moduleNameMapper": {
-      "^@app/share(|/.*)$": "<rootDir>/libs/share/src/$1",
+      "^@lib/share(|/.*)$": "<rootDir>/libs/share/src/$1",
       "^@lib/listening(|/.*)$": "<rootDir>/libs/listening/src/$1",
       "^@lib/assignments(|/.*)$": "<rootDir>/libs/assignments/src/$1",
       "^@lib/classes(|/.*)$": "<rootDir>/libs/classes/src/$1",

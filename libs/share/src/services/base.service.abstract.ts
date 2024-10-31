@@ -4,7 +4,7 @@ import { BaseSchema } from '../database/base.schema';
 import { BaseServiceInterface } from './base.service.interface';
 import { NullableType } from 'joi';
 import { PaginatedResultType } from '../serializers/paginated-response.serializer';
-import {QueryOptions} from "@app/share/ts/query-options";
+import {QueryOptions} from "@lib/share/ts/query-options";
 
 export abstract class BaseServiceAbstract<T extends BaseSchema>
   implements BaseServiceInterface<T>

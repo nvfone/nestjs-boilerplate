@@ -1,10 +1,13 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { buildMongoDBConfig } from './mongodb.config';
-import * as Joi from 'joi';
-import { mongodbConfigSchema } from './schemas/mongodb.schema';
-import { redisConfigSchema } from '@app/share/configuration/schemas/redis.schema';
-import {buildRedisConfig} from "@app/share/configuration/redis.config";
+import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import * as Joi from "joi";
+import { buildMongoDBConfig } from "./mongodb.config";
+import { buildRedisConfig } from "./redis.config";
+import { mongodbConfigSchema } from "./schemas/mongodb.schema";
+import { redisConfigSchema } from "./schemas/redis.schema";
+import { buildQueueConfig } from "./queue.config";
+import { meilisearchConfigSchema } from "./schemas/meilisearch.schema";
+import { buildMeilisearchConfig } from "./meilisearch.config";
 
 @Module({
   imports: [
@@ -12,18 +15,27 @@ import {buildRedisConfig} from "@app/share/configuration/redis.config";
       isGlobal: true,
       cache: true,
       expandVariables: true,
-      load: [buildMongoDBConfig,
-        // buildRedisConfig
+      load: [
+        buildMongoDBConfig,
+        buildRedisConfig,
+        buildQueueConfig,
+        buildMeilisearchConfig,
       ],
       validationSchema: Joi.object({
         NODE_ENV: Joi.string()
-          .valid('development', 'production', 'test', 'provision', 'staging')
-          .default('development'),
-        PORT: Joi.number().default(3001),
-        OPENAI_API_KEY: Joi.string().required(),
-        OPENAI_BASE_URL: Joi.string().required(),
-        ...mongodbConfigSchema(),
-        // ...redisConfigSchema(true),
+          .valid("development", "production", "test", "provision", "staging")
+          .default("development"),
+        WEB_PORT: Joi.number().default(3000),
+        WEB_API_PORT: Joi.number().default(3004),
+        CMS_PORT: Joi.number().default(3001),
+        CMS_API_PORT: Joi.number().default(3002),
+        BULLMQ_PORT: Joi.number().default(3003),
+        ...redisConfigSchema(true), // REDIS CACHE
+        ...mongodbConfigSchema(true), // MONGODB & DB CACHE
+        ...redisConfigSchema(true, "QUEUE"), // BULLMQ
+        ...meilisearchConfigSchema(true), // MEILISEARCH
+        WEB_API_URI: Joi.string().optional(),
+        RESOURCE_API_URI: Joi.string().optional(),
       }),
     }),
   ],
